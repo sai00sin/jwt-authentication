@@ -94,24 +94,6 @@
       onDeleteHobby (id) {
         this.hobbyInputs = this.hobbyInputs.filter(hobby => hobby.id !== id)
       },
-      /*
-      onSubmit () {
-        const formData = {
-          email: this.email,
-          age: this.age,
-          password: this.password,
-          confirmPassword: this.confirmPassword,
-          country: this.country,
-          hobbies: this.hobbyInputs.map(hobby => hobby.value),
-          terms: this.terms
-        }
-        console.log(formData)
-        axios.post('/users.json', formData)
-          .then(res => console.log(res))
-          .catch(error => console.log(error))
-      },
-      */
-
       onSubmit () {
         const formData = {
           email: this.email,
@@ -162,32 +144,8 @@
           terms: formData.terms
         });
       },
-      /*
-      multipleHandler() {
-        const formData = {
-          email: this.email,
-          age: this.age,
-          password: this.password,
-          confirmPassword: this.confirmPassword,
-          country: this.country,
-          hobbies: this.hobbyInputs.map(hobby => hobby.value),
-          terms: this.terms
-        }
-
-
-
-        this.handleSignUp(email, password)
-        this.writeUserData(userId, name)
-      }
-      */
-
-
     }
   }
-
-
-
-
 </script>
 
 <style scoped>
