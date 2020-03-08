@@ -1,21 +1,69 @@
 <template>
   <div id="signup">
     <div class="signup-form">
-      <div class="input">
-        <label for="email">Mail</label>
-        <input
-          type="text"
-          id="email"
-          name="email"
-          placeholder="Email">
-      </div>
-      <div class="input">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Password">
-      </div>
-      <div class="submit">
-        <button type="submit" id="sign-up" name="signup" @click="handleSignUp">Sign Up</button>
-      </div>
+      <form @submit.prevent="onSubmit">
+        <div class="input">
+          <label for="email">Mail</label>
+          <input
+                  type="email"
+                  id="email"
+                  v-model="email">
+        </div>
+        <div class="input">
+          <label for="age">Your Age</label>
+          <input
+                  type="number"
+                  id="age"
+                  v-model.number="age">
+        </div>
+        <div class="input">
+          <label for="password">Password</label>
+          <input
+                  type="password"
+                  id="password"
+                  v-model="password">
+        </div>
+        <div class="input">
+          <label for="confirm-password">Confirm Password</label>
+          <input
+                  type="password"
+                  id="confirm-password"
+                  v-model="confirmPassword">
+        </div>
+        <div class="input">
+          <label for="country">Country</label>
+          <select id="country" v-model="country">
+            <option value="usa">USA</option>
+            <option value="india">India</option>
+            <option value="uk">UK</option>
+            <option value="germany">Germany</option>
+          </select>
+        </div>
+        <div class="hobbies">
+          <h3>Add some Hobbies</h3>
+          <button @click="onAddHobby" type="button">Add Hobby</button>
+          <div class="hobby-list">
+            <div
+                    class="input"
+                    v-for="(hobbyInput, index) in hobbyInputs"
+                    :key="hobbyInput.id">
+              <label :for="hobbyInput.id">Hobby #{{ index }}</label>
+              <input
+                      type="text"
+                      :id="hobbyInput.id"
+                      v-model="hobbyInput.value">
+              <button @click="onDeleteHobby(hobbyInput.id)" type="button">X</button>
+            </div>
+          </div>
+        </div>
+        <div class="input inline">
+          <input type="checkbox" id="terms" v-model="terms">
+          <label for="terms">Accept Terms of Use</label>
+        </div>
+        <div class="submit">
+          <button type="submit">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
@@ -46,6 +94,7 @@
       onDeleteHobby (id) {
         this.hobbyInputs = this.hobbyInputs.filter(hobby => hobby.id !== id)
       },
+      /*
       onSubmit () {
         const formData = {
           email: this.email,
@@ -57,26 +106,37 @@
           terms: this.terms
         }
         console.log(formData)
-        /*
         axios.post('/users.json', formData)
           .then(res => console.log(res))
           .catch(error => console.log(error))
-        */
       },
-      handleSignUp () {
-        var email = document.getElementById('email').value;
-        var password = document.getElementById('password').value;
-        if (email.length < 4) {
-          alert('Please enter an email address.');
+      */
+
+      onSubmit () {
+        const formData = {
+          email: this.email,
+          age: this.age,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          country: this.country,
+          hobbies: this.hobbyInputs.map(hobby => hobby.value),
+          terms: this.terms
+        }
+        this.handleSignUp(formData)
+        this.writeUserData(formData)
+      },
+      handleSignUp (formData) {
+        if (formData.email.length < 4) {
+          alert('Please enter an formData.email address.');
           return;
         }
-        if (password.length < 4) {
+        if (formData.password.length < 4) {
           alert('Please enter a password.');
           return;
         }
         // Create user with email and pass.
         // [START createwithemail]
-        firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+        firebase.auth().createUserWithEmailAndPassword(formData.email, formData.password).catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
@@ -91,8 +151,42 @@
         });
         // [END createwithemail]
       },
+      writeUserData(formData) {
+        firebase.database().ref('users/').push({
+          email: formData.email,
+          age: formData.age,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          country: formData.country,
+          hobbies: formData.hobbies,
+          terms: formData.terms
+        });
+      },
+      /*
+      multipleHandler() {
+        const formData = {
+          email: this.email,
+          age: this.age,
+          password: this.password,
+          confirmPassword: this.confirmPassword,
+          country: this.country,
+          hobbies: this.hobbyInputs.map(hobby => hobby.value),
+          terms: this.terms
+        }
+
+
+
+        this.handleSignUp(email, password)
+        this.writeUserData(userId, name)
+      }
+      */
+
+
     }
   }
+
+
+
 
 </script>
 
