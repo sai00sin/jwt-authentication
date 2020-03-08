@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import axios from 'axios';
+  // import axios from 'axios';
 
   export default {
     data () {
@@ -16,6 +16,7 @@
       }
     },
     created () {
+      /*
       axios.get('/users.json')
         .then(res => {
           console.log(res)
@@ -30,6 +31,7 @@
           this.email = users[0].email
         })
         .catch(error => console.log(error))
+        */
     }
   }
 </script>
