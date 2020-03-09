@@ -11,6 +11,8 @@ Vue.config.productionTip = false
 const config = settings.firebaseConfig
 firebase.initializeApp(config)
 
+
+
 new Vue({
   router,
   store,

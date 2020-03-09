@@ -69,8 +69,6 @@
 </template>
 
 <script>
-  import firebase from 'firebase'
-
   export default {
     data () {
       return {
@@ -104,45 +102,8 @@
           hobbies: this.hobbyInputs.map(hobby => hobby.value),
           terms: this.terms
         }
-        this.handleSignUp(formData)
-        this.writeUserData(formData)
-      },
-      handleSignUp (formData) {
-        if (formData.email.length < 4) {
-          alert('Please enter an formData.email address.');
-          return;
-        }
-        if (formData.password.length < 4) {
-          alert('Please enter a password.');
-          return;
-        }
-        // Create user with email and pass.
-        // [START createwithemail]
-        firebase.auth().createUserWithEmailAndPassword(formData.email, formData.password).catch(function(error) {
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          // [START_EXCLUDE]
-          if (errorCode == 'auth/weak-password') {
-            alert('The password is too weak.');
-          } else {
-            alert(errorMessage);
-          }
-          console.log(error);
-          // [END_EXCLUDE]
-        });
-        // [END createwithemail]
-      },
-      writeUserData(formData) {
-        firebase.database().ref('users/').push({
-          email: formData.email,
-          age: formData.age,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-          country: formData.country,
-          hobbies: formData.hobbies,
-          terms: formData.terms
-        });
+        console.log(formData)
+        this.$store.dispatch('signup', formData)
       },
     }
   }
